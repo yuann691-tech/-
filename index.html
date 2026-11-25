@@ -3,35 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>園中懸賞趣測試</title>
-  <style>
-    body { background: #060d1f; color: #fff; font-family: sans-serif; padding: 24px; text-align: center; }
-    button { font-size: 18px; padding: 14px 24px; border-radius: 12px; border: 0; background: #06b6d4; color: #04101f; font-weight: bold; margin: 10px; }
-    #box { margin-top: 20px; padding: 16px; border: 1px solid #22d3ee; border-radius: 12px; background: #0f1c38; }
-  </style>
-</head>
-<body>
-  <h2>北園國中 AI未來實驗室｜園中懸賞趣</h2>
-  <button id="b1">點我測試按鈕 1</button>
-  <button id="b2">點我測試計數 +1</button>
-  <div id="box">目前狀態：等待點擊...</div>
-  <script>
-    let n = 0;
-    document.getElementById("b1").onclick = function () {
-      document.getElementById("box").innerText = "✅ 按鈕 1 有反應！時間：" + new Date().toLocaleTimeString();
-    };
-    document.getElementById("b2").onclick = function () {
-      n++;
-      document.getElementById("box").innerText = "✅ 按鈕 2 有反應！計數：" + n;
-    };
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>園中懸賞趣｜北園國中 AI未來實驗室</title>
   <style>
     * { box-sizing: border-box; }
@@ -375,4 +346,22 @@
               <input type="text" id="p-icon" value="🧃" required />
               <input type="text" id="p-name" placeholder="獎品名稱" required />
             </div>
-            <div st
+            <div style="display:grid; grid-template-columns:1fr 1fr auto; gap:8px;">
+              <input type="number" id="p-cost" min="1" placeholder="點數" required />
+              <input type="number" id="p-stock" min="1" placeholder="庫存" required />
+              <button type="submit" class="btn btn-gold">上架</button>
+            </div>
+          </form>
+          <div id="admin-prods-box"></div>
+        </div>
+      </div>
+
+      <div class="card" style="border-color:rgba(244,63,94,0.45); display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; align-items:center;">
+        <div style="font-size:12px; color:#fda4af;">⚙️ 資料庫維護（備份 / 還原 / 全部歸零）</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-ghost" id="btn-export">⬇️ 匯出備份</button>
+          <button type="button" class="btn btn-ghost" id="btn-import-trigger">⬆️ 還原備份</button>
+          <input type="file" id="file-import" accept=".json" class="hidden" />
+          <button type="button" class="btn btn-danger" id="btn-wipe">🗑️ 全部歸零</button>
+        </div>
+      </
