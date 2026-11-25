@@ -27,3 +27,352 @@
   </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>園中懸賞趣｜北園國中 AI未來實驗室</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(34, 211, 238, 0.16), transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(59, 130, 246, 0.18), transparent 42%),
+        linear-gradient(180deg, #050b1a 0%, #09132b 100%);
+      color: #f1f5f9;
+      min-height: 100vh;
+      padding-bottom: 48px;
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+    header {
+      position: sticky; top: 0; z-index: 30;
+      background: rgba(5, 11, 26, 0.94);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(34, 211, 238, 0.3);
+    }
+    .hdr-row {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 12px; padding: 12px 0;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .brand-title { margin: 2px 0 0; font-size: 19px; font-weight: 900; color: #e0f2fe; }
+    .tags { display: flex; gap: 6px; align-items: center; font-size: 11px; }
+    .tag-b { background: rgba(34,211,238,0.16); color: #67e8f9; border: 1px solid rgba(34,211,238,0.45); padding: 2px 8px; border-radius: 6px; font-weight: 700; }
+    .tag-g { color: #fcd34d; font-weight: 700; }
+    .motto {
+      background: rgba(12, 74, 110, 0.38);
+      border-top: 1px solid rgba(34, 211, 238, 0.18);
+      text-align: center; padding: 6px 12px; font-size: 12px; color: #bae6fd;
+    }
+    .motto b { color: #fcd34d; }
+    .btn {
+      border: none; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 700;
+      cursor: pointer; color: #fff; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      touch-action: manipulation;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-cyan { background: linear-gradient(135deg, #0284c7, #0d9488); box-shadow: 0 4px 14px rgba(13,148,136,0.32); }
+    .btn-gold { background: linear-gradient(135deg, #d97706, #e11d48); box-shadow: 0 4px 14px rgba(217,119,6,0.32); }
+    .btn-ghost { background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(148, 163, 184, 0.35); color: #e2e8f0; }
+    .btn-warn { background: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.45); color: #fcd34d; }
+    .btn-danger { background: rgba(225, 29, 72, 0.22); border: 1px solid rgba(244, 63, 94, 0.5); color: #fda4af; }
+    .card {
+      background: rgba(13, 23, 45, 0.88);
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
+    }
+    .grid-top { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; margin-top: 18px; }
+    .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+    .kpi { background: rgba(2, 6, 23, 0.78); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 12px; text-align: center; }
+    .kpi .num { font-size: 24px; font-weight: 900; color: #38bdf8; margin-top: 4px; }
+    .bar-bg { height: 10px; background: #0f172a; border-radius: 999px; overflow: hidden; border: 1px solid #1e293b; }
+    .bar-fill { height: 100%; width: 8%; background: linear-gradient(90deg, #22d3ee, #34d399, #fbbf24); transition: width 0.3s; }
+    .tabs { display: flex; gap: 8px; overflow-x: auto; padding: 14px 0 6px; }
+    .tab {
+      white-space: nowrap; padding: 10px 16px; border-radius: 12px; font-size: 13px; font-weight: 700;
+      background: rgba(15, 23, 42, 0.88); border: 1px solid #334155; color: #cbd5e1; cursor: pointer;
+    }
+    .tab.active { background: rgba(6, 182, 212, 0.24); border-color: #22d3ee; color: #67e8f9; }
+    .cards-3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px; margin-top: 12px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin-top: 12px; }
+    .hidden { display: none !important; }
+    input, select {
+      width: 100%; padding: 10px 12px; border-radius: 10px;
+      border: 1px solid #334155; background: #020617; color: #f8fafc; font-size: 14px;
+    }
+    label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 4px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+    .modal-bg {
+      position: fixed; inset: 0; z-index: 60;
+      background: rgba(2, 6, 23, 0.86);
+      display: flex; align-items: center; justify-content: center; padding: 14px;
+    }
+    .modal-box {
+      width: 100%; max-width: 780px; max-height: 88vh; overflow-y: auto;
+      background: #0b1326; border: 1px solid rgba(34, 211, 238, 0.45); border-radius: 18px; padding: 20px;
+      position: relative;
+    }
+    .modal-sm { max-width: 440px; }
+    .toast-wrap { position: fixed; top: 14px; right: 14px; z-index: 90; display: flex; flex-direction: column; gap: 8px; max-width: 320px; }
+    .toast { padding: 11px 14px; border-radius: 12px; font-size: 13px; font-weight: 700; background: #0f172a; border: 1px solid #22d3ee; color: #e0f2fe; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+    .row-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 10px; background: #020617; border: 1px solid #1e293b; margin-bottom: 8px; font-size: 13px; }
+    .pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; background: rgba(34,211,238,0.16); color: #67e8f9; border: 1px solid rgba(34,211,238,0.35); }
+    .pill-gold { background: rgba(245,158,11,0.18); color: #fcd34d; border-color: rgba(245,158,11,0.4); }
+    @media (max-width: 768px) {
+      .grid-top { grid-template-columns: 1fr; }
+    }
+    @media print {
+      body { background: #fff; color: #000; }
+      header, main, .toast-wrap, .no-print { display: none !important; }
+      .modal-bg { position: static; background: #fff; padding: 0; display: block !important; }
+      .modal-box { max-height: none; border: none; background: #fff; color: #000; }
+    }
+  </style>
+</head>
+<body>
+  <div id="toast-wrap" class="toast-wrap"></div>
+
+  <header>
+    <div class="wrap hdr-row">
+      <div class="brand" id="brand-home">
+        <svg width="44" height="44" viewBox="0 0 64 64" fill="none">
+          <polygon points="32,3 58,18 58,46 32,61 6,46 6,18" stroke="#22d3ee" stroke-width="2.6" fill="#081229"/>
+          <path d="M18 39C18 34 24 32 32 36C40 32 46 34 46 39V46C40 42 34 43 32 46C30 43 24 42 18 46V39Z" fill="rgba(14,165,233,0.35)" stroke="#38bdf8" stroke-width="2"/>
+          <path d="M32 29C32 29 22.5 23 22.5 17.8C22.5 15 24.8 13 27.3 13C29.2 13 31 14.1 32 15.7C33 14.1 34.8 13 36.7 13C39.2 13 41.5 15 41.5 17.8C41.5 23 32 29 32 29Z" fill="#f59e0b"/>
+          <circle cx="32" cy="8" r="2" fill="#22d3ee"/>
+        </svg>
+        <div>
+          <div class="tags">
+            <span class="tag-b">北園國中</span>
+            <span class="tag-g">AI未來實驗室</span>
+          </div>
+          <h1 class="brand-title">園中懸賞趣</h1>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+        <button type="button" class="btn btn-ghost" id="btn-open-report">📑 專案企劃報告書</button>
+        <button type="button" class="btn btn-ghost" id="btn-open-notif">🔔 通知 <span id="notif-cnt" class="pill pill-gold">0</span></button>
+        <button type="button" class="btn btn-warn" id="btn-open-admin">🛡️ 社團後台</button>
+        <span id="auth-header-box"></span>
+      </div>
+    </div>
+    <div class="motto">
+      ✨ <b>社團宗旨：</b>運用科技傳遞關懷，以 AI 技術打造共好、感恩、互助的幸福校園 ✨
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid-top">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div>
+            <div style="font-size:11px; color:#22d3ee; letter-spacing:1.5px; font-weight:700;">CAMPUS HAPPINESS SYSTEM</div>
+            <h2 style="margin:4px 0 0; font-size:18px;">幸福校園任務與點數即時看板</h2>
+          </div>
+          <div id="my-pts-chip" class="hidden pill pill-gold" style="font-size:13px; padding:6px 12px;">
+            💎 我的點數：<span id="my-pts-num">0</span> PTS
+          </div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi"><div style="font-size:12px; color:#94a3b8;">懸賞任務數</div><div class="num" id="kpi-tasks">0</div></div>
+          <div class="kpi"><div style="font-size:12px; color:#94a3b8;">完成互助件</div><div class="num" id="kpi-done" style="color:#34d399;">0</div></div>
+          <div class="kpi"><div style="font-size:12px; color:#94a3b8;">感謝卡片數</div><div class="num" id="kpi-cards" style="color:#fbbf24;">0</div></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;">
+          <span>🌡️ 校園幸福能量</span>
+          <span id="energy-txt" style="color:#fcd34d; font-weight:700;">0%</span>
+        </div>
+        <div class="bar-bg"><div class="bar-fill" id="energy-bar"></div></div>
+      </div>
+
+      <div class="card" style="display:flex; flex-direction:column; justify-content:space-between; border-color:rgba(251,191,36,0.4);">
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="pill pill-gold">⚡ 每日幸福簽到</span>
+            <span id="today-str" style="font-size:12px; color:#94a3b8;"></span>
+          </div>
+          <h3 style="margin:10px 0 6px; font-size:16px;">每日幸福簽到站</h3>
+          <p style="margin:0; font-size:12px; color:#cbd5e1; line-height:1.6;">
+            登入已核准開通的帳號，每天簽到領取 <b style="color:#fcd34d;">+5 PTS</b> 幸福點數！
+          </p>
+        </div>
+        <button type="button" class="btn btn-gold" id="btn-checkin" style="margin-top:14px; width:100%;">✨ 立即每日簽到 (+5 PTS)</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button type="button" class="tab active" data-tab="tasks">🎯 懸賞任務大廳</button>
+      <button type="button" class="tab" data-tab="store">🎁 幸福點數商城</button>
+      <button type="button" class="tab" data-tab="gratitude">💌 校園感謝牆</button>
+      <button type="button" class="tab" data-tab="rank">🏆 共好榮譽榜</button>
+      <button type="button" class="tab" data-tab="profile">🪪 個人存摺 / 任務審核</button>
+    </div>
+
+    <section id="sec-tasks">
+      <div class="card hidden" id="teacher-form-card" style="margin-top:12px; border-color:rgba(34,211,238,0.5);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <div>
+            <h3 style="margin:0; font-size:16px; color:#67e8f9;">🧑‍🏫 教師發布幸福懸賞任務</h3>
+            <div style="font-size:12px; color:#94a3b8;">發布任務、設定點數與實體獎勵，並審核學生完工</div>
+          </div>
+          <button type="button" class="btn btn-cyan" id="btn-ai-task">✨ AI 幫我想任務</button>
+        </div>
+        <form id="form-new-task" class="form-grid">
+          <div><label>任務名稱 *</label><input type="text" id="t-title" required placeholder="例：午休幸福小志工" /></div>
+          <div>
+            <label>任務分類</label>
+            <select id="t-cat">
+              <option value="校園服務">🏫 校園服務</option>
+              <option value="班級互助">🤝 班級互助</option>
+              <option value="圖書環境">📚 圖書環境</option>
+              <option value="社團協力">🤖 社團協力</option>
+            </select>
+          </div>
+          <div><label>點數 (PTS) *</label><input type="number" id="t-pts" min="0" max="500" value="20" required /></div>
+          <div><label>名額 *</label><input type="number" id="t-quota" min="1" max="30" value="2" required /></div>
+          <div><label>實體獎勵（選填）</label><input type="text" id="t-gift" placeholder="例：麥香飲品券" /></div>
+          <div><label>任務說明 *</label><input type="text" id="t-note" required placeholder="例：12:35 至學務處報到" /></div>
+          <div style="grid-column:1 / -1; text-align:right;">
+            <button type="submit" class="btn btn-cyan">🚀 發布懸賞任務</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card" style="margin-top:12px; display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px; align-items:center;">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-cyan t-filter" data-f="all">全部任務</button>
+          <button type="button" class="btn btn-ghost t-filter" data-f="open">尚有名額</button>
+          <button type="button" class="btn btn-ghost t-filter" data-f="fav">⭐ 我的收藏</button>
+        </div>
+        <input type="text" id="t-search" placeholder="🔍 搜尋任務、老師或獎勵..." style="max-width:260px;" />
+      </div>
+
+      <div id="tasks-list" class="cards-3"></div>
+    </section>
+
+    <section id="sec-store" class="hidden">
+      <div class="card" style="margin-top:12px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; align-items:center;">
+        <div>
+          <h3 style="margin:0; font-size:16px;">🎁 幸福點數線上兌換商城</h3>
+          <div style="font-size:12px; color:#94a3b8;">兌換後產生電子憑證序號，至社團服務台核銷領取</div>
+        </div>
+        <div id="store-pts-info" class="pill pill-gold">請先登入學生帳號</div>
+      </div>
+      <div id="store-list" class="cards-3"></div>
+    </section>
+
+    <section id="sec-gratitude" class="hidden">
+      <div class="card" style="margin-top:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <h3 style="margin:0; font-size:16px; color:#fcd34d;">💌 張貼幸福感謝卡</h3>
+          <button type="button" class="btn btn-gold" id="btn-ai-g">✨ AI 溫暖潤飾</button>
+        </div>
+        <form id="form-gratitude" class="form-grid">
+          <div><label>感謝對象 *</label><input type="text" id="g-to" required placeholder="例：801陳同學 / 導師" /></div>
+          <div style="grid-column:span 2;"><label>感謝內容 *</label><input type="text" id="g-msg" required placeholder="寫下想說的感謝與讚美..." /></div>
+          <div style="display:flex; align-items:flex-end;"><button type="submit" class="btn btn-gold" style="width:100%;">送出感謝卡</button></div>
+        </form>
+      </div>
+      <div id="gratitude-list" class="cards-3"></div>
+    </section>
+
+    <section id="sec-rank" class="hidden">
+      <div class="grid-2">
+        <div class="card">
+          <h3 style="margin:0 0 12px; font-size:16px; color:#fcd34d;">👑 幸福點數王（學生榜）</h3>
+          <div id="rank-stu"></div>
+        </div>
+        <div class="card">
+          <h3 style="margin:0 0 12px; font-size:16px; color:#67e8f9;">🌟 熱心任務王（教師榜）</h3>
+          <div id="rank-tch"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sec-profile" class="hidden">
+      <div id="profile-box" style="margin-top:12px;"></div>
+    </section>
+  </main>
+
+  <!-- 登入 / 註冊彈窗 -->
+  <div id="modal-auth" class="modal-bg hidden">
+    <div class="modal-box modal-sm">
+      <button type="button" class="btn btn-ghost" id="close-auth" style="float:right; padding:4px 10px;">✕</button>
+      <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <button type="button" class="btn btn-cyan" id="subtab-login">帳號登入</button>
+        <button type="button" class="btn btn-ghost" id="subtab-reg">申請註冊</button>
+      </div>
+
+      <form id="form-login">
+        <div style="margin-bottom:12px;"><label>帳號</label><input type="text" id="l-user" required placeholder="輸入註冊帳號" /></div>
+        <div style="margin-bottom:14px;"><label>密碼</label><input type="password" id="l-pass" required placeholder="輸入密碼" /></div>
+        <button type="submit" class="btn btn-cyan" style="width:100%;">登入園中懸賞趣</button>
+      </form>
+
+      <form id="form-reg" class="hidden">
+        <div style="margin-bottom:10px;">
+          <label>身分別 *</label>
+          <select id="r-role">
+            <option value="student">🎒 北園國中學生</option>
+            <option value="teacher">🧑‍🏫 北園國中教師</option>
+          </select>
+        </div>
+        <div style="margin-bottom:10px;"><label>真實姓名 *</label><input type="text" id="r-name" required placeholder="例：王小明" /></div>
+        <div style="margin-bottom:10px;"><label>班級 / 處室 *</label><input type="text" id="r-unit" required placeholder="例：702班 / 學務處" /></div>
+        <div style="margin-bottom:10px;"><label>設定帳號 *</label><input type="text" id="r-user" required placeholder="學號或英文帳號" /></div>
+        <div style="margin-bottom:12px;"><label>設定密碼 *</label><input type="password" id="r-pass" required placeholder="設定密碼" /></div>
+        <div style="font-size:11px; color:#fcd34d; margin-bottom:10px;">※ 送出後由社團後台驗證開通帳號。</div>
+        <button type="submit" class="btn btn-gold" style="width:100%;">送出註冊申請</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 社團後台驗證與管理彈窗 -->
+  <div id="modal-admin-gate" class="modal-bg hidden">
+    <div class="modal-box modal-sm">
+      <button type="button" class="btn btn-ghost" id="close-admin-gate" style="float:right; padding:4px 10px;">✕</button>
+      <h3 style="margin:0 0 8px; color:#fcd34d;">🛡️ 社團後台驗證</h3>
+      <p style="font-size:12px; color:#cbd5e1; margin:0 0 12px;">請輸入 AI未來實驗室社團後台管理員驗證碼：</p>
+      <form id="form-admin-gate">
+        <input type="password" id="admin-code-input" required placeholder="輸入管理員驗證碼" style="margin-bottom:12px;" />
+        <button type="submit" class="btn btn-gold" style="width:100%;">進入社團後台</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="modal-admin" class="modal-bg hidden">
+    <div class="modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="margin:0; color:#fcd34d;">🛡️ AI未來實驗室｜社團後台管理中心</h3>
+        <button type="button" class="btn btn-ghost" id="close-admin">關閉 ✕</button>
+      </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <h4 style="margin:0 0 8px; color:#67e8f9;">🎟️ 憑證現場核銷</h4>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="text" id="cert-verify-in" placeholder="輸入憑證序號（例：BY-123456）" style="flex:1; min-width:180px;" />
+          <button type="button" class="btn btn-cyan" id="btn-verify-cert">確認核銷</button>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:0; margin-bottom:14px;">
+        <div class="card">
+          <h4 style="margin:0 0 10px;">🪪 師生帳號審核</h4>
+          <div id="admin-users-box"></div>
+        </div>
+        <div class="card">
+          <h4 style="margin:0 0 10px;">🎁 商城獎品上架</h4>
+          <form id="form-add-prod" style="margin-bottom:10px;">
+            <div style="display:grid; grid-template-columns:70px 1fr; gap:8px; margin-bottom:8px;">
+              <input type="text" id="p-icon" value="🧃" required />
+              <input type="text" id="p-name" placeholder="獎品名稱" required />
+            </div>
+            <div st
