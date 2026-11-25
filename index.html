@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>園中懸賞趣｜北園國中 AI未來實驗室 幸福校園任務系統</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #060b19;
+      --card-bg: rgba(15, 23, 42, 0.78);
+      --border-glow: rgba(56, 189, 248, 0.28);
+      --accent-cyan: #06b6d4;
+      --accent-amber: #f59e0b;
+    }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      background-color: var(--bg-deep);
+      color: #f1f5f9;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.14) 0%, transparent 40%),
+        radial-gradient(circle at 85% 25%, rgba(59, 130, 246, 0.14) 0%, transparent 42%),
+        radial-gradient(circle at 50% 85%, rgba(245, 158, 11, 0.08) 0%, transparent 45%),
+        linear-gradient(rgba(14, 165, 233, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(14, 165, 233, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      min-height: 100vh;
+    }
+    .font-tech { font-family: 'Orbitron', 'Noto Sans TC', sans-serif; }
+    .cyber-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: all 0.25s ease;
+    }
+    .cyber-card:hover {
+      border-color: rgba(34, 211, 238, 0.55);
+      box-shadow: 0 10px 36px rgba(6, 182, 212, 0.16);
+    }
+    .cyber-btn {
+      background: linear-gradient(135deg, #0284c7 0%, #0d9488 100%);
+      box-shadow: 0 4px 15px rgba(13, 148, 136, 0.35);
+      transition: all 0.2s ease;
+    }
+    .cyber-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .cyber-btn:active { transform: translateY(0); }
+    .warm-btn {
+      background: linear-gradient(135deg, #d97706 0%, #e11d48 100%);
+      box-shadow: 0 4px 15px rgba(225, 29, 72, 0.3);
+      transition: all 0.2s ease;
+    }
+    .warm-btn:hover { filter: brightness(1.08); }
+    .nav-pill.active {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.25));
+      border-color: #22d3ee;
+      color: #67e8f9;
+      box-shadow: 0 0 14px rgba(34, 211, 238, 0.25);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    @media print {
+      body { background: #fff !important; color: #0f172a !important; }
+      .no-print { display: none !important; }
+      .print-only-area { display: block !important; background: #fff !important; color: #0f172a !important; box-shadow: none !important; border: none !important; }
+    }
+  </style>
+</head>
+<body class="pb-16">
+
+  <!-- Toast 通知浮窗 -->
+  <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-xs w-full pointer-events-none no-print"></div>
+
+  <!-- 頂部導覽列 -->
+  <header class="sticky top-0 z-40 border-b border-cyan-500/20 bg-slate-950/85 backdrop-blur-xl no-print">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- 校徽 Logo 與系統名稱 -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('tasks')">
+        <div class="relative w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-400/40 flex items-center justify-center shadow-lg shadow-cyan-500/15">
+          <!-- 北園國中 × AI未來實驗室 專屬 SVG 校徽 -->
+          <svg viewBox="0 0 64 64" class="w-9 h-9" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="32,3 58,18 58,46 32,61 6,46 6,18" stroke="#22d3ee" stroke-width="2.5" fill="rgba(15,23,42,0.9)"/>
+            <path d="M18 38C18 33 24 31 32 35C40 31 46 33 46 38V45C40 41 34 42 32 45C30 42 24 41 18 45V38Z" fill="#0ea5e9" fill-opacity="0.3" stroke="#38bdf8" stroke-width="2"/>
+            <path d="M32 28C32 28 23 22.5 23 17.5C23 14.8 25.2 13 27.5 13C29.3 13 31 14 32 15.5C33 14 34.7 13 36.5 13C38.8 13 41 14.8 41 17.5C41 22.5 32 28 32 28Z" fill="#f59e0b"/>
+            <circle cx="32" cy="8" r="2" fill="#22d3ee"/>
+            <circle cx="13" cy="22" r="1.8" fill="#22d3ee"/>
+            <circle cx="51" cy="22" r="1.8" fill="#22d3ee"/>
+          </svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold tracking-wider px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-300 border border-cyan-400/30">北園國中</span>
+            <span class="text-xs text-amber-300 font-medium">AI未來實驗室</span>
+          </div>
+          <h1 class="text-lg sm:text-xl font-black tracking-wide bg-gradient-to-r from-white via-cyan-200 to-amber-200 bg-clip-text text-transparent">
+            園中懸賞趣 <span class="text-xs font-tech font-normal text-cyan-400 hidden sm:inline">v3.0 FUTURE CAMPUS</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- 右側功能按鈕群 -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- 專案報告書按鈕 -->
+        <button onclick="openModal('report-modal')" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-indigo-400/30 bg-indigo-500/10 text-indigo-200 hover:bg-indigo-500/20 transition flex items-center gap-1.5">
+          <span>📑</span><span class="hidden sm:inline">社團專案報告</span>
+        </button>
+
+        <!-- 通知鈴鐺 -->
+        <button onclick="openModal('notif-modal')" class="relative p-2 rounded-lg border border-slate-700 bg-slate-900/80 text-slate-200 hover:border-cyan-400/50 transition" title="個人通知中心">
+          <span>🔔</span>
+          <span id="notif-badge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-[10px] font-bold flex items-center justify-center text-white">0</span>
+        </button>
+
+        <!-- 社團後台入口 -->
+        <button onclick="openAdminGate()" class="px-3 py-1.5 rounded-lg text-xs font-bold border border-amber-400/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 transition flex items-center gap-1">
+          <span>🛡️</span><span>社團後台</span>
+        </button>
+
+        <!-- 登入狀態 / 帳號按鈕 -->
+        <div id="auth-area"></div>
+      </div>
+    </div>
+
+    <!-- 社團宗旨跑馬燈/橫幅 -->
+    <div class="bg-gradient-to-r from-cyan-950/90 via-blue-950/90 to-slate-950/90 border-t border-cyan-500/15 px-4 py-1.5 text-center">
+      <p class="text-xs text-cyan-200/90 tracking-wide">
+        ✨ <span class="font-bold text-amber-300">社團宗旨：</span>運用科技傳遞關懷，以 AI 技術打造共好、感恩、互助的幸福校園 ✨
+      </p>
+    </div>
+  </header>
+
+  <!-- 主內容區 -->
+  <main class="max-w-7xl mx-auto px-4 pt-5 space-y-6 no-print">
+
+    <!-- 幸福共好即時儀表板 + 每日簽到 -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+      <div class="lg:col-span-8 cyber-card rounded-2xl p-5 flex flex-col justify-between relative overflow-hidden">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <span class="text-xs font-tech text-cyan-400 tracking-widest uppercase">CAMPUS HAPPINESS TELEMETRY</span>
+            <h2 class="text-lg font-bold text-white mt-0.5">北園幸福校園共好脈動</h2>
+          </div>
+          <div id="user-points-pill" class="hidden px-3.5 py-1.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-300 text-sm font-bold flex items-center gap-2">
+            <span>💎 我的幸福點數：</span>
+            <span id="header-user-pts" class="font-tech text-base text-white">0</span>
+            <span class="text-xs">PTS</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 my-2">
+          <div class="rounded-xl bg-slate-900/75 border border-cyan-500/20 p-3 text-center">
+            <div class="text-xs text-slate-400">懸賞任務總數</div>
+            <div id="stat-tasks" class="text-2xl font-black font-tech text-cyan-300 mt-1">0</div>
+          </div>
+          <div class="rounded-xl bg-slate-900/75 border border-emerald-500/20 p-3 text-center">
+            <div class="text-xs text-slate-400">已完成互助件</div>
+            <div id="stat-completed" class="text-2xl font-black font-tech text-emerald-300 mt-1">0</div>
+          </div>
+          <div class="rounded-xl bg-slate-900/75 border border-amber-500/20 p-3 text-center">
+            <div class="text-xs text-slate-400">全校感恩卡片</div>
+            <div id="stat-gratitude" class="text-2xl font-black font-tech text-amber-300 mt-1">0</div>
+          </div>
+        </div>
+
+        <!-- 幸福溫度進度條 -->
+        <div class="mt-3">
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-cyan-200">🌡️ 校園幸福能量值</span>
+            <span id="happiness-score-text" class="font-tech text-amber-300 font-bold">啟動中 (0%)</span>
+          </div>
+          <div class="w-full h-2.5 rounded-full bg-slate-800 overflow-hidden p-0.5 border border-slate-700">
+            <div id="happiness-bar" class="h-full rounded-full bg-gradient-to-r from-cyan-400 via-emerald-400 to-amber-400 transition-all duration-500" style="width: 12%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 每日幸福簽到 & 快速導引卡 -->
+      <div class="lg:col-span-4 cyber-card rounded-2xl p-5 flex flex-col justify-between border-amber-400/30">
+        <div>
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">⚡ 每日共好能量</span>
+            <span id="today-date-label" class="text-xs text-slate-400 font-tech"></span>
+          </div>
+          <h3 class="text-base font-bold text-white mt-2.5">每日幸福簽到站</h3>
+          <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+            登入已開通帳號後，每天簽到即可獲得 <span class="text-amber-300 font-bold">+5 PTS</span> 幸福能量點數，累積兌換校園好禮！
+          </p>
+        </div>
+        <button id="checkin-btn" onclick="dailyCheckIn()" class="mt-4 w-full py-2.5 rounded-xl warm-btn text-white font-bold text-sm flex items-center justify-center gap-2">
+          <span>✨</span><span id="checkin-btn-text">立即每日簽到 (+5 PTS)</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 主導覽分頁列（手機可左右滑動） -->
+    <nav class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+      <button onclick="switchTab('tasks')" id="tab-btn-tasks" class="nav-pill active shrink-0 px-4 py-2.5 rounded-xl border border-slate-700/80 bg-slate-900/70 text-sm font-bold text-slate-300 flex items-center gap-2">
+        <span>🎯</span><span>懸賞任務大廳</span>
+      </button>
+      <button onclick="switchTab('store')" id="tab-btn-store" class="nav-pill shrink-0 px-4 py-2.5 rounded-xl border border-slate-700/80 bg-slate-900/70 text-sm font-bold text-slate-300 flex items-center gap-2">
+        <span>🎁</span><span>幸福點數商城</span>
+      </button>
+      <button onclick="switchTab('gratitude')" id="tab-btn-gratitude" class="nav-pill shrink-0 px-4 py-2.5 rounded-xl border border-slate-700/80 bg-slate-900/70 text-sm font-bold text-slate-300 flex items-center gap-2">
+        <span>💌</span><span>校園感謝牆</span>
+      </button>
+      <button onclick="switchTab('leaderboard')" id="tab-btn-leaderboard" class="nav-pill shrink-0 px-4 py-2.5 rounded-xl border border-slate-700/80 bg-slate-900/70 text-sm font-bold text-slate-300 flex items-center gap-2">
+        <span>🏆</span><span>共好榮譽榜</span>
+      </button>
+      <button onclick="switchTab('my')" id="tab-btn-my" class="nav-pill shrink-0 px-4 py-2.5 rounded-xl border border-slate-700/80 bg-slate-900/70 text-sm font-bold text-slate-300 flex items-center gap-2">
+        <span>🪪</span><span>個人中心 / 存摺</span>
+      </button>
+    </nav>
+
+    <!-- 分頁 1：懸賞任務大廳 -->
+    <section id="panel-tasks" class="space-y-4">
+      <!-- 教師專屬發布任務區塊（僅教師登入顯示） -->
+      <div id="teacher-publish-box" class="hidden cyber-card rounded-2xl p-5 border-cyan-400/40">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <div>
+            <h3 class="text-base font-bold text-cyan-300 flex items-center gap-2">
+              <span>🧑‍🏫</span><span>教師發布幸福懸賞任務</span>
+            </h3>
+            <p class="text-xs text-slate-400">發布任務指派小志工或班級協助，完成後審核即可自動發放點數</p>
+          </div>
+          <button type="button" onclick="aiFillTask()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-indigo-600 to-cyan-600 text-xs font-bold text-white shadow hover:brightness-110 transition">
+            ✨ AI 幫我想幸福任務
+          </button>
+        </div>
+
+        <form onsubmit="handleCreateTask(event)" class="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div class="md:col-span-5">
+            <label class="block text-xs text-slate-300 mb-1">任務名稱 *</label>
+            <input id="task-title" type="text" required placeholder="例：學務處午休幸福小志工" class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-cyan-400 outline-none" />
+          </div>
+          <div class="md:col-span-3">
+            <label class="block text-xs text-slate-300 mb-1">任務分類</label>
+            <select id="task-category" class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-cyan-400 outline-none">
+              <option value="校園服務">🏫 校園服務</option>
+              <option value="班級互助">🤝 班級互助</option>
+              <option value="圖書環境">📚 圖書環境</option>
+              <option value="社團協力">🤖 社團協力</option>
+            </select>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs text-slate-300 mb-1">點數獎勵 (PTS) *</label>
+            <input id="task-points" type="number" min="0" max="500" value="20" required class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-cyan-400 outline-none" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-xs text-slate-300 mb-1">需求人數 *</label>
+            <input id="task-quota" type="number" min="1" max="30" value="2" required class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-cyan-400 outline-none" />
+          </div>
+          <div class="md:col-span-5">
+            <label class="block text-xs text-slate-300 mb-1">實體獎勵（選填）</label>
+            <input id="task-physical" type="text" placeholder="例：麥香飲料一瓶、榮譽讚美卡（無則免填）" class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-cyan-400 outline-none" />
+          </div>
+          <div class="md:col-span-7">
+            <label class="block text-xs text-slate-300 mb-1">任務內容與報到備註 *</label>
+            <input id="task-note" type="text" required placeholder="例：今日12:35至學務處找王老師報到協助整理資料" class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-cyan-400 outline-none" />
+          </div>
+          <div class="md:col-span-12 flex justify-end">
+            <button type="submit" class="px-5 py-2.5 rounded-xl cyber-btn text-white font-bold text-sm">
+              🚀 立即發布懸賞任務
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 搜尋與篩選列 -->
+      <div class="cyber-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2 flex-wrap">
+          <button onclick="setTaskFilter('all')" class="task-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40" data-filter="all">全部任務</button>
+          <button onclick="setTaskFilter('open')" class="task-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800/80 text-slate-300 border border-slate-700" data-filter="open">尚有名額</button>
+          <button onclick="setTaskFilter('fav')" class="task-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800/80 text-slate-300 border border-slate-700" data-filter="fav">⭐ 我的收藏</button>
+        </div>
+        <input id="task-search" oninput="renderTasks()" type="text" placeholder="🔍 搜尋任務關鍵字、老師或獎勵..." class="w-full sm:w-64 px-3.5 py-1.5 rounded-xl bg-slate-950/90 border border-slate-700 text-xs text-white focus:border-cyan-400 outline-none" />
+      </div>
+
+      <!-- 任務卡片列表 -->
+      <div id="tasks-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- 分頁 2：幸福點數商城 -->
+    <section id="panel-store" class="hidden space-y-4">
+      <div class="cyber-card rounded-2xl p-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h3 class="text-base font-bold text-white flex items-center gap-2"><span>🎁</span><span>幸福點數線上兌換商城</span></h3>
+          <p class="text-xs text-slate-400">使用任務賺取的幸福點數兌換好禮，生成電子憑證序號後至社團服務台核銷領取</p>
+        </div>
+        <div id="store-balance-box" class="text-xs px-3 py-1.5 rounded-lg bg-slate-900 border border-amber-400/30 text-amber-300 font-bold">
+          請先登入學生帳號進行兌換
+        </div>
+      </div>
+
+      <div id="store-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- 分頁 3：校園幸福感謝牆 -->
+    <section id="panel-gratitude" class="hidden space-y-4">
+      <div class="cyber-card rounded-2xl p-5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div>
+            <h3 class="text-base font-bold text-amber-300 flex items-center gap-2"><span>💌</span><span>傳遞幸福感謝卡</span></h3>
+            <p class="text-xs text-slate-400">寫下對同學、老師或校園夥伴的感謝，讓溫暖在北園國中流動</p>
+          </div>
+          <button type="button" onclick="aiPolishGratitude()" class="px-3 py-1.5 rounded-lg bg-rose-500/20 border border-rose-400/40 text-rose-200 text-xs font-bold hover:bg-rose-500/30 transition">
+            ✨ AI 溫暖潤飾文案
+          </button>
+        </div>
+        <form onsubmit="handlePostGratitude(event)" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+          <div class="sm:col-span-4">
+            <input id="gratitude-to" type="text" required placeholder="感謝對象（例：801陳同學 / 學務處老師）" class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-amber-400 outline-none" />
+          </div>
+          <div class="sm:col-span-6">
+            <input id="gratitude-msg" type="text" required placeholder="想說的感謝與讚美內容..." class="w-full px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-700 text-sm text-white focus:border-amber-400 outline-none" />
+          </div>
+          <div class="sm:col-span-2">
+            <button type="submit" class="w-full h-full py-2 rounded-xl warm-btn text-white font-bold text-sm">送出感謝</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="gratitude-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+    </section>
+
+    <!-- 分頁 4：共好榮譽排行榜 -->
+    <section id="panel-leaderboard" class="hidden grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="cyber-card rounded-2xl p-5">
+        <h3 class="text-base font-bold text-amber-300 flex items-center gap-2 mb-4">
+          <span>👑</span><span>幸福點數王（學生共好榜）</span>
+        </h3>
+        <div id="student-rank-list" class="space-y-2.5"></div>
+      </div>
+
+      <div class="cyber-card rounded-2xl p-5">
+        <h3 class="text-base font-bold text-cyan-300 flex items-center gap-2 mb-4">
+          <span>🌟</span><span>熱心任務王（教師推手榜）</span>
+        </h3>
+        <div id="teacher-rank-list" class="space-y-2.5"></div>
+      </div>
+    </section>
+
+    <!-- 分頁 5：個人中心 / 點數存摺 / 教師審核 -->
+    <section id="panel-my" class="hidden space-y-4">
+      <div id="my-content-area"></div>
+    </section>
+
+  </main>
+
+  <!-- ==================== 彈窗區 (Modals) ==================== -->
+
+  <!-- 1. 登入 / 註冊彈窗 -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 no-print">
+    <div class="cyber-card rounded-2xl max-w-md w-full p-6 relative">
+      <butto
